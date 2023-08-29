@@ -14,8 +14,8 @@ export default class Offers extends BaseEntity {
   id: number;
 
   @Column({
-    type: 'text',
-    array: true
+    type: "text",
+    array: true,
   })
   images: string[];
 

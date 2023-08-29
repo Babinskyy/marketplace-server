@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
-
 @Entity()
 export default class Categories extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -8,7 +7,7 @@ export default class Categories extends BaseEntity {
 
   @Column()
   url: string;
-  
+
   @Column()
   name: string;
 }
