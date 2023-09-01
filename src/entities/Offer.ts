@@ -3,13 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
-  AfterLoad,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
+import Category from "./Category";
 
 @Entity()
-export default class Offers extends BaseEntity {
+export default class Offer extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -40,6 +40,7 @@ export default class Offers extends BaseEntity {
   @Column()
   phone: string;
 
-  @Column()
-  category: string;
+  @ManyToOne(() => Category, (category) => category.offers)
+  @JoinColumn({ name: "category_id" })
+  category: Category;
 }

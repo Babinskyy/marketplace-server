@@ -1,7 +1,8 @@
 import { DataSource, DataSourceOptions } from "typeorm";
-import Users from "../entities/Users";
-import Offers from "../entities/Offers";
-import Categories from "../entities/Categories";
+import User from "../entities/User";
+import Offer from "../entities/Offer";
+import Category from "../entities/Category";
+import Image from "../entities/Image";
 import {
   DATABASE_HOST,
   DATABASE_PORT,
@@ -19,7 +20,7 @@ const dataSourceOptions: DataSourceOptions = {
   database: DATABASE_NAME,
   synchronize: true,
   logging: true,
-  entities: [Users, Offers, Categories],
+  entities: [User, Offer, Category, Image],
   subscribers: [],
   migrations: [],
 };

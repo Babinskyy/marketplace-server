@@ -3,8 +3,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { PORT, DATABASE_NAME } from "./src/config/env-variable";
 import datasource from "./src/db/datasource";
-import categoriesRouter from "./src/Routers/categoriesRouter";
-import offersRouter from "./src/Routers/offersRouter";
+import categoryRouter from "./src/Routers/CategoryRouter";
+import offerRouter from "./src/Routers/OfferRouter";
+import Image from "./src/entities/Image";
+import getAzureImages from "./src/Controllers/GetAzureImages";
+import multer from 'multer';
 
 dotenv.config();
 
@@ -12,13 +15,26 @@ const app: Application = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript TypeORM Server");
 });
 
-app.use("/categories", categoriesRouter);
-app.use("/offers", offersRouter);
+app.use("/categories", categoryRouter);
+app.use("/offers", offerRouter);
+
+
+const main = async () => {
+  try {
+    const urls = await getAzureImages();
+    console.log('Image URLs:', urls);
+  } catch (error) {
+    console.error('Error retrieving image URLs:', error);
+  }
+};
+// main();
+
 
 (async () => {
   try {

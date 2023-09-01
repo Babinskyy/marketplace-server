@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import Categories from "../entities/Categories";
+import Category from "../entities/Category";
 import datasource from "../db/datasource";
 
 const categoryController = {
   index: async (req: Request, res: Response) => {
     try {
-      const categoriesRepository = datasource.getRepository(Categories);
+      const categoriesRepository = datasource.getRepository(Category);
       const categories = await categoriesRepository.find();
 
       res.json(categories);

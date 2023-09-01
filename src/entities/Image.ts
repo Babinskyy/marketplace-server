@@ -1,12 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @Entity()
-export default class Users extends BaseEntity {
+export default class Image extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  username: string;
+  @Column({ name: "image", type: "bytea" })
+  image: Buffer;
 }
-
-

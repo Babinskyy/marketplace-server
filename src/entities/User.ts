@@ -1,13 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @Entity()
-export default class Categories extends BaseEntity {
+export default class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  url: string;
-
-  @Column()
-  name: string;
+  username: string;
 }
+
+
