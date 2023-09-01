@@ -8,6 +8,8 @@ import offerRouter from "./src/Routers/OfferRouter";
 import Image from "./src/entities/Image";
 import getAzureImages from "./src/Controllers/GetAzureImages";
 import multer from 'multer';
+import path from "path";
+
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript TypeORM Server");
