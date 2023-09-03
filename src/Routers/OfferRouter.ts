@@ -19,16 +19,7 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get("/", offerController.index);
-router.post(
-  "/upload",
-  (req: Request, res: Response, next) => {
-    req.blabla = "alibaba";
-    next();
-  },
-  upload.single("file"),
-  offerController.upload
-);
+router.post("/upload", upload.array("file", 3), offerController.upload);
 router.post("/create", offerController.create);
-// router.post("/images", offerController.images);
 
 export default router;

@@ -22,7 +22,6 @@ const offerController = {
   },
 
   upload: function (req: Request, res: Response) {
-    console.log(req.body.title);
     res.status(200).json();
   },
 
@@ -41,6 +40,7 @@ const offerController = {
     newOffer.author = req.body.author;
     newOffer.country = req.body.country;
     newOffer.phone = req.body.phone;
+    newOffer.category = req.body.category;
     try {
       const offerRepository = datasource.getRepository(Offer);
       const savedOffer = await offerRepository.save(newOffer);
@@ -55,14 +55,14 @@ const offerController = {
               console.log("Successfully renamed the directory.");
 
               const imagesPaths: string[] = [];
-              
-                fs.readdirSync(`./uploads/${savedOffer.id}/`).forEach((file) => {
-                  imagesPaths.push(
-                    `http://localhost:8000/uploads/${savedOffer.id}/${file}`
-                  );
-                });
-            
-                console.log(imagesPaths);
+
+              fs.readdirSync(`./uploads/${savedOffer.id}/`).forEach((file) => {
+                imagesPaths.push(
+                  `http://localhost:8000/uploads/${savedOffer.id}/${file}`
+                );
+              });
+
+              console.log(imagesPaths);
 
               try {
                 offerRepository
