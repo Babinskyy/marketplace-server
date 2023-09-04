@@ -5,21 +5,40 @@ import { PORT, DATABASE_NAME } from "./src/config/env-variable";
 import datasource from "./src/db/datasource";
 import categoryRouter from "./src/Routers/CategoryRouter";
 import offerRouter from "./src/Routers/OfferRouter";
-import Image from "./src/entities/Image";
+import usersRouter from "./src/Routers/UsersRouter";
 import getAzureImages from "./src/Controllers/GetAzureImages";
-import multer from 'multer';
 import path from "path";
-
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import { Strategy as LocalStrategy } from "passport-local";
+import passport from "passport";
+import passportConfig from "./src/config/passportConfig";
 
 dotenv.config();
 
 const app: Application = express();
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(
+  session({
+    secret: "secretcode",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(cookieParser("secretcode"));
+app.use(passport.initialize());
+app.use(passport.session());
+passportConfig(passport);
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript TypeORM Server");
@@ -27,24 +46,23 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/categories", categoryRouter);
 app.use("/offers", offerRouter);
+app.use("/users", usersRouter);
 
-
-const main = async () => {
+const getAzureData = async () => {
   try {
     const urls = await getAzureImages();
-    console.log('Image URLs:', urls);
+    console.log("Image URLs:", urls);
   } catch (error) {
-    console.error('Error retrieving image URLs:', error);
+    console.error("Error retrieving image URLs:", error);
   }
 };
-// main();
-
+// getAzureData();
 
 (async () => {
   try {
     await datasource.initialize();
     if (datasource.isInitialized) {
-      console.log(`Database ${DATABASE_NAME} connected`);
+      console.log(`Database ${DATABASE_NAME}'connected`);
       app.listen(PORT, () =>
         console.log(`Server is running at: http://localhost:${PORT}/`)
       );

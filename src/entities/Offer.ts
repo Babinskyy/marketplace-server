@@ -7,6 +7,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import Category from "./Category";
+import Users from "./Users";
 
 @Entity()
 export default class Offer extends BaseEntity {
@@ -43,4 +44,8 @@ export default class Offer extends BaseEntity {
   @ManyToOne(() => Category, (category) => category.offers)
   @JoinColumn({ name: "category_id" })
   category: Category;
+
+  @ManyToOne(() => Users, (users) => users.offers)
+  @JoinColumn({ name: "user_id" })
+  user: Users;
 }

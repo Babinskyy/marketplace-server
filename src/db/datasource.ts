@@ -1,5 +1,5 @@
 import { DataSource, DataSourceOptions } from "typeorm";
-import User from "../entities/User";
+import User from "../entities/Users";
 import Offer from "../entities/Offer";
 import Category from "../entities/Category";
 import Image from "../entities/Image";
