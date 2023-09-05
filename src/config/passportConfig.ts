@@ -45,7 +45,7 @@ const passportFunc = (passport: any) => {
         },
       });
       if (user) {
-        cb(null, user);
+        cb(null, user.username);
       } else {
         cb(null, false);
       }

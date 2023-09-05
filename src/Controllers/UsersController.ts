@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import Users from "../entities/Users";
 import datasource from "../db/datasource";
 import bcrypt from "bcryptjs";
@@ -18,18 +18,27 @@ const usersController = {
         .json({ message: "Error fetching users from the database" });
     }
   },
-  login: async (req: Request, res: Response, next: any) => {
-    passport.authenticate("local", (err: any, user: any, info: any) => {
-      if (err) throw err;
-      if (!user) res.status(200).json("User not exist");
-      else {
-        req.login(user, (err) => {
-          if (err) throw err;
-          res.status(200).json("success");
-          console.log(req.user);
-        });
+  login: async (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(
+      "local",
+      (err: Error | null, user: Users | false, info: string) => {
+        if (err) {
+          return next(err);
+        }
+        if (!user) {
+          return res
+            .status(401)
+            .json({ message: "Incorrect username or password." });
+        } else {
+          req.login(user, (err) => {
+            if (err) {
+              return next(err);
+            }
+            return res.status(200).json({ message: "logged", user });
+          });
+        }
       }
-    })(req, res, next);
+    )(req, res, next);
   },
   signup: async (req: Request, res: Response) => {
     try {
