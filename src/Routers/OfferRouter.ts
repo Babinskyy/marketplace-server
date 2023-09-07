@@ -2,7 +2,7 @@ import express from "express";
 import offerController from "../Controllers/OfferController";
 import multer from "multer";
 import fs from "fs";
-import { Request, Response } from "express";
+import authMiddle from "../middlewares/AuthMiddleware";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

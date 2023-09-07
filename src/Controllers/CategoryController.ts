@@ -8,7 +8,7 @@ const categoryController = {
       const categoriesRepository = datasource.getRepository(Category);
       const categories = await categoriesRepository.find();
 
-      res.json(categories);
+      res.json({error: false, categories: categories});
     } catch (error) {
       console.error(error);
       res

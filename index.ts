@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 import { Strategy as LocalStrategy } from "passport-local";
 import passport from "passport";
 import passportConfig from "./src/config/passportConfig";
+import authMiddle from "./src/middlewares/AuthMiddleware";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -45,7 +47,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/categories", categoryRouter);
-app.use("/offers", offerRouter);
+app.use("/offers", authMiddle, offerRouter);
 app.use("/users", usersRouter);
 
 const getAzureData = async () => {
@@ -62,9 +64,9 @@ const getAzureData = async () => {
   try {
     await datasource.initialize();
     if (datasource.isInitialized) {
-      console.log(`Database ${DATABASE_NAME}'connected`);
+      console.log(`Database ${DATABASE_NAME} connected`);
       app.listen(PORT, () =>
-        console.log(`Server is running at: http://localhost:${PORT}/`)
+        console.log(`Server is fire at: http://localhost:${PORT}/`)
       );
     }
   } catch (err) {
