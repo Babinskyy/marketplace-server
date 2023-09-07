@@ -10,7 +10,6 @@ import getAzureImages from "./src/Controllers/GetAzureImages";
 import path from "path";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import { Strategy as LocalStrategy } from "passport-local";
 import passport from "passport";
 import passportConfig from "./src/config/passportConfig";
 import authMiddle from "./src/middlewares/AuthMiddleware";

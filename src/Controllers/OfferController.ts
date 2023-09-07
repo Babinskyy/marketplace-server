@@ -3,6 +3,7 @@ import Offer from "../entities/Offer";
 import Category from "../entities/Category";
 import datasource from "../db/datasource";
 import fs from "fs";
+import Users from "../entities/Users";
 
 const offerController = {
   index: async (req: Request, res: Response) => {
@@ -30,6 +31,10 @@ const offerController = {
     const dd = String(today.getDate()).padStart(2, "0");
     const mm = String(today.getMonth() + 1).padStart(2, "0");
     const yyyy = today.getFullYear();
+    const usersRepository = datasource.getRepository(Users);
+      const author = await usersRepository.findBy({
+        id: res.locals.userId,
+      });
 
     const newOffer = new Offer();
     newOffer.title = req.body.title;
@@ -37,7 +42,7 @@ const offerController = {
     newOffer.description = req.body.description;
     newOffer.price = req.body.price;
     newOffer.date = dd + "-" + mm + "-" + yyyy;
-    newOffer.author = req.body.author;
+    newOffer.author = author[0].username;
     newOffer.country = req.body.country;
     newOffer.phone = req.body.phone;
     newOffer.category = req.body.category;
@@ -80,8 +85,8 @@ const offerController = {
       } catch (err) {
         console.log(err);
       }
-
-      res.status(201).json({ id: savedOffer.id });
+      
+      res.status(201).json({ id: savedOffer.id, username: author[0].username});
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error creating the offer" });
