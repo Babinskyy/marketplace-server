@@ -2,15 +2,14 @@ import express from "express";
 import offerController from "../Controllers/OfferController";
 import multer from "multer";
 import fs from "fs";
-import authMiddle from "../middlewares/AuthMiddleware";
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (_req, _file, cb) => {
     const path = `./uploads/new`;
     fs.mkdirSync(path, { recursive: true });
     return cb(null, path);
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     cb(null, file.originalname);
   },
 });

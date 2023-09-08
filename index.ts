@@ -40,6 +40,7 @@ app.use(passport.session());
 passportConfig(passport);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/images/categories", express.static(path.join(__dirname, "images/categories")));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript TypeORM Server");
