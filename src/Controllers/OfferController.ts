@@ -46,6 +46,7 @@ const offerController = {
     newOffer.country = req.body.country;
     newOffer.phone = req.body.phone;
     newOffer.category = req.body.category;
+    newOffer.user = author[0];
     try {
       const offerRepository = datasource.getRepository(Offer);
       const savedOffer = await offerRepository.save(newOffer);
