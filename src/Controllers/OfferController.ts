@@ -14,6 +14,7 @@ const offerController = {
       });
 
       res.json(offers);
+      // res.json("");
     } catch (error) {
       console.error(error);
       res
