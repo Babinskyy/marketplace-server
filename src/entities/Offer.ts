@@ -45,7 +45,7 @@ export default class Offer extends BaseEntity {
   @JoinColumn({ name: "category_id" })
   category: Category;
 
-  @ManyToOne(() => Users, (users) => users.offers)
+  @ManyToOne(() => Users, (user) => user.offers)
   @JoinColumn({ name: "user_id" })
   user: Users;
 }

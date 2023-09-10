@@ -44,7 +44,7 @@ const usersController = {
               secure: false,
             });
 
-            return res.status(200).json({ message: "logged", user });
+            return res.status(200).json({ message: "logged", user_id: user.id });
           });
         }
       }

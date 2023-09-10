@@ -12,9 +12,14 @@ const offerController = {
       const offers = await offerRepository.find({
         relations: ["category"],
       });
+      const userRepository = datasource.getRepository(Users);
+      const user = await userRepository.findOne({
+        where:{
+          id: res.locals.userId
+        }
+      })
 
-      res.json(offers);
-      // res.json("");
+      res.json({ offers: offers, userId: res.locals.userId, username: user?.username });
     } catch (error) {
       console.error(error);
       res
@@ -23,7 +28,28 @@ const offerController = {
     }
   },
 
-  upload: function (req: Request, res: Response) {
+  user: async (req: Request, res: Response) => {
+    const userId = res.locals.userId;
+
+    try {
+      const offerRepository = datasource.getRepository(Offer);
+      const userOffers = await offerRepository
+        .createQueryBuilder("offer")
+        .where("offer.user = :userId", { userId })
+        .leftJoinAndSelect("offer.category", "category")
+        .getMany();
+
+      res.json({ offers: userOffers, user: res.locals.userId });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: true,
+        message: "Error fetching data from the database",
+      });
+    }
+  },
+
+  upload: (req: Request, res: Response) => {
     res.status(200).json();
   },
 
@@ -33,9 +59,9 @@ const offerController = {
     const mm = String(today.getMonth() + 1).padStart(2, "0");
     const yyyy = today.getFullYear();
     const usersRepository = datasource.getRepository(Users);
-      const author = await usersRepository.findBy({
-        id: res.locals.userId,
-      });
+    const author = await usersRepository.findBy({
+      id: res.locals.userId,
+    });
 
     const newOffer = new Offer();
     newOffer.title = req.body.title;
@@ -58,6 +84,7 @@ const offerController = {
           function (err) {
             if (err) {
               console.log(err);
+              res.status(500).json({ error: true, message: "Error creating the offer" });
             } else {
               console.log("Successfully renamed the directory.");
 
@@ -80,18 +107,38 @@ const offerController = {
                   .execute();
               } catch (err) {
                 console.log(err);
+                res.status(500).json({ error: true, message: "Error creating the offer" });
               }
             }
           }
         );
       } catch (err) {
         console.log(err);
+        res.status(500).json({ error: true, message: "Error creating the offer" });
       }
-      
-      res.status(201).json({ id: savedOffer.id, username: author[0].username});
+
+      res.status(201).json({ id: savedOffer.id, username: author[0].username });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error creating the offer" });
+      res.status(500).json({ error: true, message: "Error creating the offer" });
+    }
+  },
+
+  delete: async (req: Request, res: Response) => {
+    try {
+      await datasource
+        .getRepository(Offer)
+        .createQueryBuilder("offers")
+        .delete()
+        .from(Offer)
+        .where("id = :id", { id: req.params.id })
+        .execute();
+      res
+        .status(200)
+        .json({ error: false, message: `Offer ${req.params.id} deleted.` });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: true, message: `Error while deleting.` });
     }
   },
 };
