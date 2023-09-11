@@ -73,7 +73,7 @@ const getAzureData = async () => {
     await datasource.initialize();
     if (datasource.isInitialized) {
       console.log(`Database ${DATABASE_NAME} connected`);
-      app.listen(PORT, () =>
+      app.listen(process.env.PORT || 8000, () =>
         console.log(`Server is fire at: http://localhost:${PORT}/`)
       );
     }
