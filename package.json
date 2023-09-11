@@ -2,12 +2,11 @@
   "name": "marketplace-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --files ./index.ts"
   },
-  "start:dev": "nodemon --files ./index.ts",
-  "start": "nodemon --files ./index.ts",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -22,7 +21,6 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pg": "^8.11.3",
@@ -39,6 +37,7 @@
     "@types/multer": "^1.4.7",
     "@types/node": "^20.5.7",
     "@types/passport-local": "^1.0.35",
+    "nodemon": "^3.0.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
   }
