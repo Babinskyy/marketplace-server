@@ -13,12 +13,12 @@ import {
 
 const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
-  url: process.env.DATABASE_URL, 
-  // host: DATABASE_HOST,
-  // port: DATABASE_PORT,
-  // username: DATABASE_USERNAME,
-  // password: DATABASE_PASSWORD,
-  // database: DATABASE_NAME,
+  // url: process.env.DATABASE_URL, 
+  host: DATABASE_HOST,
+  port: DATABASE_PORT,
+  username: DATABASE_USERNAME,
+  password: DATABASE_PASSWORD,
+  database: DATABASE_NAME,
   synchronize: true,
   logging: true,
   entities: [User, Offer, Category],
