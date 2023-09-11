@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Offer from "../entities/Offer";
-import Category from "../entities/Category";
 import datasource from "../db/datasource";
 import fs from "fs";
 import Users from "../entities/Users";
@@ -14,12 +13,16 @@ const offerController = {
       });
       const userRepository = datasource.getRepository(Users);
       const user = await userRepository.findOne({
-        where:{
-          id: res.locals.userId
-        }
-      })
+        where: {
+          id: res.locals.userId,
+        },
+      });
 
-      res.json({ offers: offers, userId: res.locals.userId, username: user?.username });
+      res.json({
+        offers: offers,
+        userId: res.locals.userId,
+        username: user?.username,
+      });
     } catch (error) {
       console.error(error);
       res
@@ -49,7 +52,7 @@ const offerController = {
     }
   },
 
-  upload: (req: Request, res: Response) => {
+  upload: (_req: Request, res: Response) => {
     res.status(200).json();
   },
 
@@ -84,7 +87,9 @@ const offerController = {
           function (err) {
             if (err) {
               console.log(err);
-              res.status(500).json({ error: true, message: "Error creating the offer" });
+              res
+                .status(500)
+                .json({ error: true, message: "Error creating the offer" });
             } else {
               console.log("Successfully renamed the directory.");
 
@@ -107,20 +112,43 @@ const offerController = {
                   .execute();
               } catch (err) {
                 console.log(err);
-                res.status(500).json({ error: true, message: "Error creating the offer" });
+                res
+                  .status(500)
+                  .json({ error: true, message: "Error creating the offer" });
               }
             }
           }
         );
       } catch (err) {
         console.log(err);
-        res.status(500).json({ error: true, message: "Error creating the offer" });
+        res
+          .status(500)
+          .json({ error: true, message: "Error creating the offer" });
       }
 
       res.status(201).json({ id: savedOffer.id, username: author[0].username });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: true, message: "Error creating the offer" });
+      res
+        .status(500)
+        .json({ error: true, message: "Error creating the offer" });
+    }
+  },
+  update: async (req: Request, res: Response) => {
+    try {
+      await datasource
+        .getRepository(Offer)
+        .createQueryBuilder("offers")
+        .update(Offer)
+        .set({ title: req.body.title1, price: req.body.price, description: req.body.description })
+        .where("id = :id", { id: req.params.id })
+        .execute();
+      res
+        .status(200)
+        .json({ error: false, message: `Offer ${req.params.id} updated.` });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: true, message: `Error while updating.` });
     }
   },
 

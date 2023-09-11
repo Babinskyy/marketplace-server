@@ -21,6 +21,7 @@ router.get("/", offerController.index);
 router.get("/user", offerController.user);
 router.post("/upload", upload.array("file", 3), offerController.upload);
 router.post("/create", offerController.create);
+router.put("/update/:id", offerController.update);
 router.delete("/delete/:id", offerController.delete);
 
 export default router;
