@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "ts-node index.ts"
+    "start": "nodemon --files ./index.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +27,6 @@
     "pg": "^8.11.3",
     "typeorm": "^0.3.17"
   },
-  
   "devDependencies": {
     "@types/bcryptjs": "^2.4.3",
     "@types/cookie-parser": "^1.4.4",
@@ -44,5 +43,4 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
   }
-
 }
