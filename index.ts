@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { PORT, DATABASE_NAME } from "./src/config/env-variable";
+import { PORT, DATABASE_NAME, NODE_ENV, MY_SETTING } from "./src/config/env-variable";
 import datasource from "./src/db/datasource";
 import categoryRouter from "./src/Routers/CategoryRouter";
 import offerRouter from "./src/Routers/OfferRouter";
@@ -44,6 +44,13 @@ app.use("/images/categories", express.static(path.join(__dirname, "images/catego
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript TypeORM Server");
+});
+app.get("/healthcheck", (req: Request, res: Response) => {
+  res.send({
+    status: "online",
+    NODE_ENV,
+    MY_SETTING,
+  });
 });
 
 app.use("/categories", categoryRouter);
