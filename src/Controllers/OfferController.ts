@@ -5,7 +5,7 @@ import fs from "fs";
 import Users from "../entities/Users";
 
 const offerController = {
-  index: async (req: Request, res: Response) => {
+  index: async (_req: Request, res: Response) => {
     try {
       const offerRepository = datasource.getRepository(Offer);
       const offers = await offerRepository.find({
@@ -31,7 +31,7 @@ const offerController = {
     }
   },
 
-  user: async (req: Request, res: Response) => {
+  user: async (_req: Request, res: Response) => {
     const userId = res.locals.userId;
 
     try {

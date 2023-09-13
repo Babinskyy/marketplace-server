@@ -38,7 +38,7 @@ app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
     "https://marketplace.babinsky.pl"
