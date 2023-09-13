@@ -97,7 +97,7 @@ const offerController = {
 
               fs.readdirSync(`./uploads/${savedOffer.id}/`).forEach((file) => {
                 imagesPaths.push(
-                  `https://marketplaceserver-2777642eddf2.herokuapp.com/${savedOffer.id}/${file}`
+                  `https://marketplaceserver-2777642eddf2.herokuapp.com/uploads/${savedOffer.id}/${file}`
                 );
               });
 
