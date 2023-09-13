@@ -38,9 +38,20 @@ app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
 passportConfig(passport);
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://marketplace.babinsky.pl/"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/images/categories", express.static(path.join(__dirname, "images/categories")));
+app.use(
+  "/images/categories",
+  express.static(path.join(__dirname, "images/categories"))
+);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript TypeORM Server");
@@ -67,7 +78,7 @@ let port = process.env.PORT || 8000;
     await datasource.initialize();
     if (datasource.isInitialized) {
       console.log(`Database ${DATABASE_NAME} connected`);
-      
+
       app.listen(port, () =>
         // console.log(`Server is fire at: http://localhost:${PORT}/`)
         console.log(`Server is Fire`)
