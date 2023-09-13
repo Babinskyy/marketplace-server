@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 const authMiddle = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies["AuthenticationToken"];
+  console.log(token);
   if (token) {
     try {
       jwt.verify(
