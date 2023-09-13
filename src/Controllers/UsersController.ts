@@ -76,13 +76,19 @@ const usersController = {
     }
   },
   logout: (_req: Request, res: Response) => {
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.clearCookie("AuthenticationToken", {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-    });
-    res.status(401).json({ error: false, message: "logout" });
+    try{
+      res.setHeader("Access-Control-Allow-Credentials", "true");
+      res.clearCookie("AuthenticationToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+      res.status(200).json({ error: false, message: "logout" });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: true, message: "Logout error" });
+    }
+    
   },
 };
 
