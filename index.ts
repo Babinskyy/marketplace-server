@@ -59,6 +59,7 @@ const getAzureData = async () => {
     console.error("Error retrieving image URLs:", error);
   }
 };
+console.log(DATABASE_NAME);
 // getAzureData();
 let port = process.env.PORT || 8000;
 (async () => {
@@ -66,6 +67,7 @@ let port = process.env.PORT || 8000;
     await datasource.initialize();
     if (datasource.isInitialized) {
       console.log(`Database ${DATABASE_NAME} connected`);
+      
       app.listen(port, () =>
         console.log(`Server is fire at: http://localhost:${PORT}/`)
       );
