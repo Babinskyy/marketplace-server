@@ -47,8 +47,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/categories", categoryRouter);
-app.use("/offers", authMiddle, offerRouter);
-// app.use("/offers", offerRouter);
+// app.use("/offers", authMiddle, offerRouter);
+app.use("/offers", offerRouter);
 app.use("/users", usersRouter);
 
 const getAzureData = async () => {
