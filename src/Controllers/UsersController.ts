@@ -45,7 +45,7 @@ const usersController = {
               domain: "marketplaceserver-2777642eddf2.herokuapp.com"
             });
 
-            return res.status(200).json({ message: "logged", user_id: user.id });
+            return res.status(200).json({ message: "logged", user_id: user.id, token: token });
           });
         }
       }
