@@ -41,7 +41,8 @@ const usersController = {
             });
             res.cookie("AuthenticationToken", token, {
               httpOnly: true,
-              secure: false,
+              secure: true,
+              domain: "marketplaceserver-2777642eddf2.herokuapp.com"
             });
 
             return res.status(200).json({ message: "logged", user_id: user.id });

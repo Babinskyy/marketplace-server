@@ -37,6 +37,7 @@ app.use(
 app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
+app.set("trust proxy", 1);
 passportConfig(passport);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
