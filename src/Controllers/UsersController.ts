@@ -79,7 +79,8 @@ const usersController = {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.clearCookie("AuthenticationToken", {
       httpOnly: true,
-      secure: false,
+      secure: true,
+      sameSite: 'none',
     });
     res.status(401).json({ error: false, message: "logout" });
   },
