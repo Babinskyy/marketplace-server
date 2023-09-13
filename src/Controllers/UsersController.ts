@@ -40,9 +40,9 @@ const usersController = {
               expiresIn: "24h",
             });
             res.cookie("AuthenticationToken", token, {
-              httpOnly: true,
+              httpOnly: false,
               secure: true,
-              domain: "marketplaceserver-2777642eddf2.herokuapp.com"
+   
             });
 
             return res.status(200).json({ message: "logged", user_id: user.id, token: token });
