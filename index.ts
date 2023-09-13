@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://marketplace.babinsky.pl/",
+    origin: "https://marketplace.babinsky.pl",
     credentials: true,
   })
 );
