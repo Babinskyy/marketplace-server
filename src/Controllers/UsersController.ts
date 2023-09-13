@@ -45,7 +45,7 @@ const usersController = {
               sameSite: 'none',
             });
 
-            return res.status(200).json({ message: "logged", user_id: user.id, token: token });
+            return res.status(200).json({ message: "logged", user_id: user.id });
           });
         }
       }
