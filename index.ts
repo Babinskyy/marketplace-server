@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://marketplaceserver-2777642eddf2.herokuapp.com/",
+    origin: "http://localhost:3000/",
     credentials: true,
   })
 );
