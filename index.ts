@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://marketplaceserver-2777642eddf2.herokuapp.com/",
     credentials: true,
   })
 );
@@ -47,8 +47,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/categories", categoryRouter);
-app.use("/offers", authMiddle, offerRouter);
-// app.use("/offers", offerRouter);
+// app.use("/offers", authMiddle, offerRouter);
+app.use("/offers", offerRouter);
 app.use("/users", usersRouter);
 
 const getAzureData = async () => {
@@ -69,7 +69,8 @@ let port = process.env.PORT || 8000;
       console.log(`Database ${DATABASE_NAME} connected`);
       
       app.listen(port, () =>
-        console.log(`Server is fire at: http://localhost:${PORT}/`)
+        // console.log(`Server is fire at: http://localhost:${PORT}/`)
+        console.log(`Server is Fire`)
       );
     }
   } catch (err) {
