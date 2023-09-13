@@ -40,8 +40,8 @@ const usersController = {
               expiresIn: "24h",
             });
             res.cookie("AuthenticationToken", token, {
-              httpOnly: false,
-              secure: true,
+              httpOnly: true,
+              secure: false,
             });
 
             return res.status(200).json({ message: "logged", user_id: user.id, token: token });
