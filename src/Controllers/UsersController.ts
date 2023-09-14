@@ -42,10 +42,13 @@ const usersController = {
             res.cookie("AuthenticationToken", token, {
               httpOnly: true,
               secure: true,
-              sameSite: 'none',
+              sameSite: "none",
+              maxAge: 2 * 60 * 60 * 1000,
             });
 
-            return res.status(200).json({ message: "logged", user_id: user.id });
+            return res
+              .status(200)
+              .json({ message: "logged", user_id: user.id });
           });
         }
       }
@@ -76,19 +79,18 @@ const usersController = {
     }
   },
   logout: (_req: Request, res: Response) => {
-    try{
+    try {
       res.setHeader("Access-Control-Allow-Credentials", "true");
       res.clearCookie("AuthenticationToken", {
         httpOnly: true,
         secure: true,
-        sameSite: 'none',
+        sameSite: "none",
       });
       res.status(200).json({ error: false, message: "logout" });
     } catch (err) {
       console.log(err);
       res.status(500).json({ error: true, message: "Logout error" });
     }
-    
   },
 };
 
