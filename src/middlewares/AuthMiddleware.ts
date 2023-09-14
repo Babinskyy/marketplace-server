@@ -32,7 +32,6 @@ const authMiddle = (req: Request, res: Response, next: NextFunction) => {
     console.log("No token, authorization denied");
     res.status(500).json({ error: true, message: "not authorized" });
   }
-  // next();
 };
 
 export default authMiddle;
