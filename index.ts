@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { PORT, DATABASE_NAME } from "./src/config/env-variable";
+import { PORT, DATABASE_NAME, URL } from "./src/config/env-variable";
 import datasource from "./src/db/datasource";
 import categoryRouter from "./src/Routers/CategoryRouter";
 import offerRouter from "./src/Routers/OfferRouter";
@@ -23,7 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://marketplace.yan.software",
+    // origin: "https://marketplace.yan.software",
+    origin: URL,
     credentials: true,
   })
 );
@@ -41,7 +42,8 @@ passportConfig(passport);
 app.use((_req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://marketplace.yan.software"
+    // "https://marketplace.yan.software"
+    URL as string
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
@@ -62,16 +64,16 @@ app.use("/offers", authMiddle, offerRouter);
 // app.use("/offers", offerRouter);
 app.use("/users", usersRouter);
 
-const getAzureData = async () => {
-  try {
-    const urls = await getAzureImages();
-    console.log("Image URLs:", urls);
-  } catch (error) {
-    console.error("Error retrieving image URLs:", error);
-  }
-};
-console.log(DATABASE_NAME);
+// const getAzureData = async () => {
+//   try {
+//     const urls = await getAzureImages();
+//     console.log("Image URLs:", urls);
+//   } catch (error) {
+//     console.error("Error retrieving image URLs:", error);
+//   }
+// };
 // getAzureData();
+console.log(DATABASE_NAME);
 let port = process.env.PORT || 8000;
 (async () => {
   try {
@@ -80,8 +82,8 @@ let port = process.env.PORT || 8000;
       console.log(`Database ${DATABASE_NAME} connected`);
 
       app.listen(port, () =>
-        // console.log(`Server is fire at: http://localhost:${PORT}/`)
-        console.log(`Server is Fire`)
+        console.log(`Server is fire at: http://localhost:${PORT}/`)
+        // console.log(`Server is Fire`)
       );
     }
   } catch (err) {

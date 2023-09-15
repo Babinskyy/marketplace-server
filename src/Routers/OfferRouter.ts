@@ -3,6 +3,7 @@ import offerController from "../Controllers/OfferController";
 import multer from "multer";
 import fs from "fs";
 
+
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
     const path = `./uploads/new`;
