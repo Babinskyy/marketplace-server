@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://marketplace.babinsky.pl",
+    origin: "https://marketplace.yan.software",
     credentials: true,
   })
 );
@@ -41,7 +41,7 @@ passportConfig(passport);
 app.use((_req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://marketplace.babinsky.pl"
+    "https://marketplace.yan.software"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
