@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Offer from "../entities/Offer";
 import datasource from "../db/datasource";
 import fs from "fs";
+import { unlink } from 'node:fs/promises';
 import Users from "../entities/Users";
 
 const offerController = {
@@ -161,6 +162,14 @@ const offerController = {
         .from(Offer)
         .where("id = :id", { id: req.params.id })
         .execute();
+        try {
+          await unlink(`/uploads/hello${req.params.id}`);
+          console.log(`successfully deleted /uploads/${req.params.id}`);
+        } catch (error) {
+          console.error(`Error while deleting '/uploads/${req.params.id}':`, error);
+        }
+
+
       res
         .status(200)
         .json({ error: false, message: `Offer ${req.params.id} deleted.` });
