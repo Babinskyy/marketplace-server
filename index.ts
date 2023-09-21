@@ -6,7 +6,6 @@ import datasource from "./src/db/datasource";
 import categoryRouter from "./src/routers/CategoryRouter";
 import offerRouter from "./src/routers/OfferRouter";
 import usersRouter from "./src/routers/UsersRouter";
-import getAzureImages from "./src/controllers/GetAzureImages";
 import path from "path";
 import session from "express-session";
 import cookieParser from "cookie-parser";
@@ -64,15 +63,6 @@ app.use("/offers", authMiddle, offerRouter);
 // app.use("/offers", offerRouter);
 app.use("/users", usersRouter);
 
-// const getAzureData = async () => {
-//   try {
-//     const urls = await getAzureImages();
-//     console.log("Image URLs:", urls);
-//   } catch (error) {
-//     console.error("Error retrieving image URLs:", error);
-//   }
-// };
-// getAzureData();
 console.log(DATABASE_NAME);
 let port = process.env.PORT || 8000;
 (async () => {
