@@ -4,7 +4,7 @@ import datasource from "../db/datasource";
 import { promises as fsPromises } from "fs";
 import Users from "../entities/Users";
 import { uploadImageToAzure } from "./UploadToAzure";
-import getAzureImages from "./GetAzureImages";
+import getAzureImages from "./GetAzureImages"
 
 const offerController = {
   index: async (_req: Request, res: Response) => {
