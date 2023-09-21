@@ -1,5 +1,5 @@
 import express from "express";
-import offerController from "../Controllers/OfferController";
+import offerController from "../controllers/OfferController";
 import multer from "multer";
 import fs from "fs";
 
