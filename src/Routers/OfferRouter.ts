@@ -2,6 +2,7 @@ import express from "express";
 import offerController from "../Controllers/OfferController";
 import multer from "multer";
 import fs from "fs";
+import authMiddle from "../middlewares/AuthMiddleware";
 
 
 const storage = multer.diskStorage({
@@ -20,6 +21,7 @@ const router = express.Router();
 
 router.get("/", offerController.index);
 router.get("/user", offerController.user);
+router.get("/logged", authMiddle, offerController.logged);
 router.post("/upload", upload.array("file", 3), offerController.upload);
 router.post("/create", offerController.create);
 router.put("/update/:id", offerController.update);

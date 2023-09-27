@@ -4,7 +4,7 @@ import datasource from "../db/datasource";
 import { promises as fsPromises } from "fs";
 import Users from "../entities/Users";
 import { uploadImageToAzure } from "./UploadToAzure";
-import getAzureImages from "./GetAzureImages"
+import getAzureImages from "./GetAzureImages";
 
 const offerController = {
   index: async (_req: Request, res: Response) => {
@@ -52,6 +52,9 @@ const offerController = {
         message: "Error fetching data from the database",
       });
     }
+  },
+  logged: async (_req: Request, res: Response) => {
+    res.status(200).json({ message: "logged" });
   },
 
   upload: async (req: Request, res: Response) => {
@@ -107,17 +110,20 @@ const offerController = {
       const offerRepository = datasource.getRepository(Offer);
       const savedOffer = await offerRepository.save(newOffer);
       try {
-
         const imagesPaths: string[] = [];
 
         const pushAzureData = async () => {
           try {
-            const urls = await getAzureImages(savedOffer.id.toString()) as string[];
+            const urls = (await getAzureImages(
+              savedOffer.id.toString()
+            )) as string[];
             console.log("Image URLs:", urls);
-            
+
             for (const url of urls) {
-              const path = url.split("?")
-              imagesPaths.push(`${path[0]}?sp=r&st=2023-09-15T12:13:46Z&se=2023-10-01T20:13:46Z&sv=2022-11-02&sr=c&sig=9e%2FQAnJpGdg1NjUmf4ZiZPC89pcZl0ihi1f6jnJCQmc%3D`);
+              const path = url.split("?");
+              imagesPaths.push(
+                `${path[0]}?sp=r&st=2023-09-15T12:13:46Z&se=2023-10-01T20:13:46Z&sv=2022-11-02&sr=c&sig=9e%2FQAnJpGdg1NjUmf4ZiZPC89pcZl0ihi1f6jnJCQmc%3D`
+              );
             }
           } catch (error) {
             console.error("Error retrieving image URLs:", error);
@@ -138,7 +144,6 @@ const offerController = {
             .status(500)
             .json({ error: true, message: "Error creating the offer" });
         }
-
       } catch (err) {
         console.log(err);
         res
