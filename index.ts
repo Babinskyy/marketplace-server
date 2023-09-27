@@ -54,13 +54,13 @@ app.use(
   express.static(path.join(__dirname, "images/categories"))
 );
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript TypeORM Server");
 });
 
 app.use("/categories", categoryRouter);
-app.use("/offers", authMiddle, offerRouter);
-// app.use("/offers", offerRouter);
+// app.use("/offers", authMiddle, offerRouter);
+app.use("/offers", offerRouter);
 app.use("/users", usersRouter);
 
 console.log(DATABASE_NAME);
