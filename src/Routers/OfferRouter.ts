@@ -20,7 +20,8 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get("/", offerController.index);
-router.get("/user", offerController.user);
+router.get("/findOne/:id", offerController.findOne);
+router.get("/user", authMiddle, offerController.user);
 router.get("/logged", authMiddle, offerController.logged);
 router.post("/upload", upload.array("file", 3), offerController.upload);
 router.post("/create", offerController.create);

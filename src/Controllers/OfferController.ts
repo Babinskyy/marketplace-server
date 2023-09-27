@@ -13,17 +13,32 @@ const offerController = {
       const offers = await offerRepository.find({
         relations: ["category"],
       });
-      const userRepository = datasource.getRepository(Users);
-      const user = await userRepository.findOne({
-        where: {
-          id: res.locals.userId,
-        },
-      });
 
       res.json({
         offers: offers,
-        userId: res.locals.userId,
-        username: user?.username,
+      });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "Error fetching data from the database" });
+    }
+  },
+  findOne: async (req: Request, res: Response) => {
+    try {
+      const offerRepository = datasource.getRepository(Offer);
+
+      const offer = await offerRepository
+        .createQueryBuilder("offer")
+        .leftJoinAndSelect("offer.user", "user")
+        .where("offer.id = :id", { id: req.params.id })
+        .getOne();
+
+      const userId = offer?.user?.id;
+
+      res.json({
+        offer: offer,
+        authorId: userId,
       });
     } catch (error) {
       console.error(error);
@@ -35,7 +50,7 @@ const offerController = {
 
   user: async (_req: Request, res: Response) => {
     const userId = res.locals.userId;
-
+    console.log("userId:", userId);
     try {
       const offerRepository = datasource.getRepository(Offer);
       const userOffers = await offerRepository
@@ -54,7 +69,8 @@ const offerController = {
     }
   },
   logged: async (_req: Request, res: Response) => {
-    res.status(200).json({ message: "logged" });
+    const userId = res.locals.userId;
+    res.status(200).json({ userId: userId });
   },
 
   upload: async (req: Request, res: Response) => {
