@@ -59,8 +59,8 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.use("/categories", categoryRouter);
-// app.use("/offers", authMiddle, offerRouter);
-app.use("/offers", offerRouter);
+app.use("/offers", authMiddle, offerRouter);
+// app.use("/offers", offerRouter);
 app.use("/users", usersRouter);
 
 console.log(DATABASE_NAME);
