@@ -4,7 +4,6 @@ import multer from "multer";
 import fs from "fs";
 import authMiddle from "../middlewares/AuthMiddleware";
 
-
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
     const path = `./uploads/new`;
@@ -22,9 +21,8 @@ const router = express.Router();
 router.get("/", offerController.index);
 router.get("/findOne/:id", offerController.findOne);
 router.get("/user", authMiddle, offerController.user);
-router.get("/logged", authMiddle, offerController.logged);
 router.post("/upload", upload.array("file", 3), offerController.upload);
-router.post("/create", offerController.create);
+router.post("/create", authMiddle, offerController.create);
 router.put("/update/:id", offerController.update);
 router.delete("/delete/:id", offerController.delete);
 

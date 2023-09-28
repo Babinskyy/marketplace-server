@@ -69,11 +69,6 @@ const offerController = {
       });
     }
   },
-  logged: async (_req: Request, res: Response) => {
-    const userId = res.locals.userId;
-    res.status(200).json({ userId: userId });
-  },
-
   upload: async (req: Request, res: Response) => {
     try {
       const offerRepository = datasource.getRepository(Offer);
@@ -110,6 +105,10 @@ const offerController = {
     const author = await usersRepository.findBy({
       id: res.locals.userId,
     });
+    console.log(res.locals.userId);
+    console.log("author: ", author);
+    console.log("author[0]: ", author[0]);
+    console.log("author[0].username: ", author[0].username);
 
     const newOffer = new Offer();
     newOffer.title = req.body.title;

@@ -6,7 +6,7 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 
 const usersController = {
-  index: async (req: Request, res: Response) => {
+  index: async (_req: Request, res: Response) => {
     try {
       const usersRepository = datasource.getRepository(Users);
       const users = await usersRepository.find();
@@ -32,7 +32,7 @@ const usersController = {
             .status(401)
             .json({ message: "Incorrect username or password." });
         } else {
-          req.login(user, (err) => {
+          req.login(user, async (err) => {
             if (err) {
               return next(err);
             }
@@ -46,9 +46,20 @@ const usersController = {
               maxAge: 2 * 60 * 60 * 1000,
             });
 
-            return res
-              .status(200)
-              .json({ message: "logged", user_id: user.id });
+            try {
+              const usersRepository = datasource.getRepository(Users);
+              const fetchedUser = await usersRepository
+                .createQueryBuilder("user")
+                .where("user.id = :id", { id: user.id })
+                .getOne();
+              return res.status(200).json({
+                message: "logged",
+                user_id: user.id,
+                username: fetchedUser?.username,
+              });
+            } catch (error) {
+              console.error(error);
+            }
           });
         }
       }
@@ -91,6 +102,13 @@ const usersController = {
       console.log(err);
       res.status(500).json({ error: true, message: "Logout error" });
     }
+  },
+  loggedCheck: async (_req: Request, res: Response) => {
+    const userId = res.locals.userId;
+    const findUser = await datasource.getRepository(Users).findBy({
+      id: userId,
+    });
+    res.status(200).json({ userId: userId, username: findUser[0].username });
   },
 };
 
