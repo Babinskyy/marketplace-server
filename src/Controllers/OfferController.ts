@@ -5,6 +5,7 @@ import { promises as fsPromises } from "fs";
 import Users from "../entities/Users";
 import { uploadImageToAzure } from "./UploadToAzure";
 import getAzureImages from "./GetAzureImages";
+import deleteBlobFolderFromAzure from "./DeleteFromAzure";
 
 const offerController = {
   index: async (_req: Request, res: Response) => {
@@ -197,31 +198,67 @@ const offerController = {
     }
   },
 
+  // delete: async (req: Request, res: Response) => {
+  //   try {
+  //     await datasource
+  //       .getRepository(Offer)
+  //       .createQueryBuilder("offers")
+  //       .delete()
+  //       .from(Offer)
+  //       .where("id = :id", { id: req.params.id })
+  //       .execute();
+  //     try {
+  //       await fsPromises.rm(`./uploads/${req.params.id}`, {
+  //         recursive: true,
+  //         force: true,
+  //       });
+  //       console.log(`Successfully deleted directory /uploads/${req.params.id}`);
+  //     } catch (error) {
+  //       console.error(
+  //         `Error while deleting '/uploads/${req.params.id}':`,
+  //         error
+  //       );
+  //     }
+
+  //     res
+  //       .status(200)
+  //       .json({ error: false, message: `Offer ${req.params.id} deleted.` });
+  //   } catch (err) {
+  //     console.log(err);
+  //     res.status(500).json({ error: true, message: `Error while deleting.` });
+  //   }
+  // },
+
   delete: async (req: Request, res: Response) => {
     try {
-      await datasource
-        .getRepository(Offer)
+      const offerRepository = datasource.getRepository(Offer);
+      const offerId = req.params.id; // The ID of the offer to delete
+
+      // After deleting the blobs, you can proceed to delete the offer from your database
+
+      // Delete the specific directory from Azure Blob Storage within the "uploads" container
+      const containerName = `uploads`; // Convert to lowercase
+      const blobName = offerId;
+      // containerName = containerName.replace(/[^a-z0-9-]/g, "-");
+
+      deleteBlobFolderFromAzure(containerName, blobName)
+        .then(() => {
+          console.log(`Deleted blob folder: 177`);
+        })
+        .catch((error) => {
+          console.error(`Error deleting blob folder 177:`, error);
+        });
+
+      await offerRepository
         .createQueryBuilder("offers")
         .delete()
         .from(Offer)
-        .where("id = :id", { id: req.params.id })
+        .where("id = :id", { id: offerId })
         .execute();
-      try {
-        await fsPromises.rm(`./uploads/${req.params.id}`, {
-          recursive: true,
-          force: true,
-        });
-        console.log(`Successfully deleted directory /uploads/${req.params.id}`);
-      } catch (error) {
-        console.error(
-          `Error while deleting '/uploads/${req.params.id}':`,
-          error
-        );
-      }
 
       res
         .status(200)
-        .json({ error: false, message: `Offer ${req.params.id} deleted.` });
+        .json({ error: false, message: `Offer ${offerId} deleted.` });
     } catch (err) {
       console.log(err);
       res.status(500).json({ error: true, message: `Error while deleting.` });

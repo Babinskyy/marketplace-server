@@ -11,16 +11,16 @@ const blobService = azure.createBlobService(storageAccount, storageAccessKey);
 
 const getImageUrls = async (blobId: string) => {
   return new Promise((resolve, reject) => {
-    const prefix = `${blobId}/`; // Set the prefix to your desired blobId
+    const prefix = `${blobId}/`;
 
     const requestOptions = {
-      maxResults: 1000, // Set to a large number to retrieve all matching blobs
+      maxResults: 1000,
     };
 
     blobService.listBlobsSegmentedWithPrefix(
       containerName,
       prefix,
-      null as any, // Pass null as the continuation token
+      null as any,
       requestOptions,
       (error, result) => {
         if (error) {
