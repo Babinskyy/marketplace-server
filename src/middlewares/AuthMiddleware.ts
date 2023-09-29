@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 const authMiddle = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies["AuthenticationToken"];
-  console.log( "token: ", token);
+  console.log("token: ", token);
   if (token) {
     try {
       jwt.verify(
@@ -30,7 +30,7 @@ const authMiddle = (req: Request, res: Response, next: NextFunction) => {
     }
   } else {
     console.log("No token, authorization denied");
-    res.status(500).json({ error: true, message: "not authorized" });
+    res.status(401).json({ error: true, message: "not authorized" });
   }
 };
 
