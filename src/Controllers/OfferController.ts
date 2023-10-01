@@ -137,9 +137,10 @@ const offerController = {
 
             for (const url of urls) {
               const path = url.split("?");
-              imagesPaths.push(
-                `${path[0]}?sp=r&st=2023-09-15T12:13:46Z&se=2023-10-01T20:13:46Z&sv=2022-11-02&sr=c&sig=9e%2FQAnJpGdg1NjUmf4ZiZPC89pcZl0ihi1f6jnJCQmc%3D`
-              );
+              // imagesPaths.push(
+              //   `${path[0]}?sp=r&st=2023-09-15T12:13:46Z&se=2023-10-01T20:13:46Z&sv=2022-11-02&sr=c&sig=9e%2FQAnJpGdg1NjUmf4ZiZPC89pcZl0ihi1f6jnJCQmc%3D`
+              // );
+              imagesPaths.push(path[0]);
             }
           } catch (error) {
             console.error("Error retrieving image URLs:", error);
