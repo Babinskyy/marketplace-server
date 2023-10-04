@@ -178,87 +178,96 @@ const offerController = {
   },
   update: async (req: Request, res: Response) => {
     try {
-      await datasource
-        .getRepository(Offer)
-        .createQueryBuilder("offers")
-        .update(Offer)
-        .set({
-          title: req.body.title1,
-          price: req.body.price,
-          description: req.body.description,
-        })
-        .where("id = :id", { id: req.params.id })
-        .execute();
-      res
-        .status(200)
-        .json({ error: false, message: `Offer ${req.params.id} updated.` });
+      const offerRepository = datasource.getRepository(Offer);
+
+      const offer = await offerRepository
+        .createQueryBuilder("offer")
+        .leftJoinAndSelect("offer.user", "user")
+        .where("offer.id = :id", { id: req.params.id })
+        .getOne();
+
+      const userId = offer?.user.id;
+      if (!(res.locals.userId === userId)) {
+        res.status(401).json({ error: true, message: "Authentication error" });
+      } else {
+        try {
+          await datasource
+            .getRepository(Offer)
+            .createQueryBuilder("offers")
+            .update(Offer)
+            .set({
+              title: req.body.title1,
+              price: req.body.price,
+              description: req.body.description,
+            })
+            .where("id = :id", { id: req.params.id })
+            .execute();
+          res
+            .status(200)
+            .json({ error: false, message: `Offer ${req.params.id} updated.` });
+        } catch (err) {
+          console.log(err);
+          res
+            .status(500)
+            .json({ error: true, message: `Error while updating.` });
+        }
+      }
     } catch (err) {
       console.log(err);
       res.status(500).json({ error: true, message: `Error while updating.` });
     }
   },
 
-  // delete: async (req: Request, res: Response) => {
-  //   try {
-  //     await datasource
-  //       .getRepository(Offer)
-  //       .createQueryBuilder("offers")
-  //       .delete()
-  //       .from(Offer)
-  //       .where("id = :id", { id: req.params.id })
-  //       .execute();
-  //     try {
-  //       await fsPromises.rm(`./uploads/${req.params.id}`, {
-  //         recursive: true,
-  //         force: true,
-  //       });
-  //       console.log(`Successfully deleted directory /uploads/${req.params.id}`);
-  //     } catch (error) {
-  //       console.error(
-  //         `Error while deleting '/uploads/${req.params.id}':`,
-  //         error
-  //       );
-  //     }
-
-  //     res
-  //       .status(200)
-  //       .json({ error: false, message: `Offer ${req.params.id} deleted.` });
-  //   } catch (err) {
-  //     console.log(err);
-  //     res.status(500).json({ error: true, message: `Error while deleting.` });
-  //   }
-  // },
-
   delete: async (req: Request, res: Response) => {
     try {
       const offerRepository = datasource.getRepository(Offer);
-      const offerId = req.params.id; // The ID of the offer to delete
 
-      // After deleting the blobs, you can proceed to delete the offer from your database
+      const offer = await offerRepository
+        .createQueryBuilder("offer")
+        .leftJoinAndSelect("offer.user", "user")
+        .where("offer.id = :id", { id: req.params.id })
+        .getOne();
 
-      // Delete the specific directory from Azure Blob Storage within the "uploads" container
-      const containerName = `uploads`; // Convert to lowercase
-      const blobName = offerId;
-      // containerName = containerName.replace(/[^a-z0-9-]/g, "-");
+      const userId = offer?.user.id;
+      if (!(res.locals.userId === userId)) {
+        res.status(401).json({ error: true, message: "Authentication error" });
+      } else {
+        try {
+          const offerRepository = datasource.getRepository(Offer);
+          const offerId = req.params.id; // The ID of the offer to delete
 
-      deleteBlobFolderFromAzure(containerName, blobName)
-        .then(() => {
-          console.log(`Deleted blob folder: 177`);
-        })
-        .catch((error) => {
-          console.error(`Error deleting blob folder 177:`, error);
-        });
+          // After deleting the blobs, you can proceed to delete the offer from your database
 
-      await offerRepository
-        .createQueryBuilder("offers")
-        .delete()
-        .from(Offer)
-        .where("id = :id", { id: offerId })
-        .execute();
+          // Delete the specific directory from Azure Blob Storage within the "uploads" container
+          const containerName = `uploads`; // Convert to lowercase
+          const blobName = offerId;
+          // containerName = containerName.replace(/[^a-z0-9-]/g, "-");
 
-      res
-        .status(200)
-        .json({ error: false, message: `Offer ${offerId} deleted.` });
+          deleteBlobFolderFromAzure(containerName, blobName)
+            .then(() => {
+              console.log(`Deleted blob folder: 177`);
+            })
+            .catch((error) => {
+              console.error(`Error deleting blob folder 177:`, error);
+            });
+
+          await offerRepository
+            .createQueryBuilder("offers")
+            .delete()
+            .from(Offer)
+            .where("id = :id", { id: offerId })
+            .execute();
+
+          res
+            .status(200)
+            .json({ error: false, message: `Offer ${offerId} deleted.` });
+        } catch (err) {
+          console.log(err);
+          res
+            .status(500)
+            .json({ error: true, message: `Error while deleting.` });
+        }
+      }
     } catch (err) {
       console.log(err);
       res.status(500).json({ error: true, message: `Error while deleting.` });

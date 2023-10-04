@@ -21,9 +21,14 @@ const router = express.Router();
 router.get("/", offerController.index);
 router.get("/findOne/:id", offerController.findOne);
 router.get("/user", authMiddle, offerController.user);
-router.post("/upload", upload.array("file", 3), offerController.upload);
+router.post(
+  "/upload",
+  authMiddle,
+  upload.array("file", 3),
+  offerController.upload
+);
 router.post("/create", authMiddle, offerController.create);
-router.put("/update/:id", offerController.update);
-router.delete("/delete/:id", offerController.delete);
+router.put("/update/:id", authMiddle, offerController.update);
+router.delete("/delete/:id", authMiddle, offerController.delete);
 
 export default router;

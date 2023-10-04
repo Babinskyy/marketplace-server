@@ -18,6 +18,7 @@ const authMiddle = (req: Request, res: Response, next: NextFunction) => {
               .status(401)
               .json({ error: true, message: "Token is not valid" });
           } else {
+            console.log("decoded: ", decoded);
             const userId = (decoded as jwt.JwtPayload).id;
             res.locals.userId = userId;
             next();
